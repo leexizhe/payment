@@ -1,0 +1,37 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: ledger-service   # becomes the service.name on your traces
+  datasource:
+    # Postgres from docker-compose (service: postgres)
+    url: jdbc:postgresql://localhost:5432/ledger
+    username: ledger
+    password: ledger
+  jpa:
+    hibernate:
+      ddl-auto: validate   # Liquibase owns the schema; Hibernate only checks it matches
+    open-in-view: false
+  liquibase:
+    change-log: classpath:db/changelog/db.changelog-master.yaml
+  mvc:
+    problemdetails:
+      enabled: true   # RFC-9457 error bodies for framework errors too, one format everywhere
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health, info, prometheus, metrics
+  metrics:
+    tags:
+      # Every metric gets this tag — handy for filtering in Grafana
+      application: ledger-service
+  tracing:
+    sampling:
+      probability: 1.0   # sample 100% in dev; dial down in prod (e.g. 0.1)
+  otlp:
+    tracing:
+      # OTel Collector's OTLP HTTP endpoint (from docker-compose)
+      endpoint: http://localhost:4318/v1/traces

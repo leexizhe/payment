@@ -1,0 +1,13 @@
+global:
+  scrape_interval: 5s
+  evaluation_interval: 5s
+
+scrape_configs:
+  - job_name: "ledger-service"
+    metrics_path: "/actuator/prometheus"
+    static_configs:
+      # Your Spring Boot app runs on the host; the container reaches it here.
+      # If you dockerize the app instead, change this to the service name.
+      - targets: ["host.docker.internal:8080"]
+        labels:
+          application: "ledger-service"
