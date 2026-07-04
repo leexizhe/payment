@@ -7,7 +7,9 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 A double-entry payment ledger (`ledger-service/`, Java 25 + Spring Boot 3) wired into an observability stack for SRE practice. Two halves:
 
 - **docker-compose (repo root)** runs the infrastructure: Postgres, Prometheus, Tempo, OTel Collector, Grafana. Config files (`prometheus.yml`, `tempo.yaml`, `otel-collector-config.yaml`, `grafana/provisioning/`) live at the root.
-- **ledger-service runs on the host** (not in compose), on :8080. Prometheus scrapes it via `host.docker.internal:8080`; the app exports OTLP spans to the collector, which forwards to Tempo. Grafana (:3000, anonymous admin) queries both.
+- **ledger-service runs on the host** by default, on :8080 (or in compose via `docker compose --profile app up -d --build`, which builds `ledger-service/Dockerfile`). Prometheus scrapes it via `host.docker.internal:8080`; the app exports OTLP spans to the collector, which forwards to Tempo. Grafana (:3000, anonymous admin) queries both and auto-provisions the RED dashboard from `grafana/dashboards/ledger-red.json` (datasource UIDs `prometheus`/`tempo` are pinned in provisioning — dashboard JSON references them).
+
+CI: `.github/workflows/ci.yml` runs `./mvnw verify` (including Testcontainers ITs) on push/PR. `ledger-service/mvnw` must keep its executable bit in git (`git update-index --chmod=+x`) or the Linux runner and Docker build fail.
 
 ## Commands
 
