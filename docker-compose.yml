@@ -61,6 +61,7 @@ services:
     container_name: ledger-grafana
     volumes:
       - ./grafana/provisioning:/etc/grafana/provisioning
+      - ./grafana/dashboards:/var/lib/grafana/dashboards
     environment:
       - GF_AUTH_ANONYMOUS_ENABLED=true
       - GF_AUTH_ANONYMOUS_ORG_ROLE=Admin
@@ -70,6 +71,23 @@ services:
     depends_on:
       - prometheus
       - tempo
+
+  # Optional: run the app itself in Docker instead of on the host.
+  # Off by default (see README); enable with: docker compose --profile app up -d --build
+  ledger-service:
+    build: ./ledger-service
+    container_name: ledger-service
+    profiles: ["app"]
+    ports:
+      - "8080:8080"   # published, so the existing Prometheus scrape target still works
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres:5432/ledger
+      - MANAGEMENT_OTLP_TRACING_ENDPOINT=http://otel-collector:4318/v1/traces
+    depends_on:
+      postgres:
+        condition: service_healthy
+      otel-collector:
+        condition: service_started
 
 volumes:
   pgdata:
