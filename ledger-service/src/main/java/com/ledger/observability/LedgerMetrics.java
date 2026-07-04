@@ -39,7 +39,9 @@ public class LedgerMetrics {
 
         this.postingLatency = Timer.builder("ledger.posting.latency")
                 .description("Time to persist a double-entry posting")
-                .publishPercentiles(0.5, 0.95, 0.99)
+                // Buckets (not client-side quantiles) so Prometheus can compute
+                // any percentile server-side and aggregate across instances
+                .publishPercentileHistogram()
                 .register(registry);
     }
 

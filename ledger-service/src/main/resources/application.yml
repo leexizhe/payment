@@ -28,6 +28,11 @@ management:
     tags:
       # Every metric gets this tag — handy for filtering in Grafana
       application: ledger-service
+    distribution:
+      percentiles-histogram:
+        # Export histogram buckets so p95/p99 can be computed server-side
+        # with histogram_quantile() — without this there are no _bucket series
+        http.server.requests: true
   tracing:
     sampling:
       probability: 1.0   # sample 100% in dev; dial down in prod (e.g. 0.1)
