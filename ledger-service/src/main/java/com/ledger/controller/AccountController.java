@@ -4,21 +4,18 @@ import com.ledger.dto.account.response.AccountResponse;
 import com.ledger.exception.AccountNotFoundException;
 import com.ledger.repository.AccountRepository;
 import com.ledger.repository.PostingRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
 @RequestMapping("/api/accounts")
+@RequiredArgsConstructor
 public class AccountController {
 
     private final AccountRepository accounts;
     private final PostingRepository postings;
-
-    public AccountController(AccountRepository accounts, PostingRepository postings) {
-        this.accounts = accounts;
-        this.postings = postings;
-    }
 
     @GetMapping
     public List<AccountResponse> listAccounts() {

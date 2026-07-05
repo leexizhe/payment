@@ -7,17 +7,15 @@ import com.ledger.exception.InsufficientFundsException;
 import com.ledger.observability.LedgerMetrics;
 import com.ledger.repository.AccountRepository;
 import com.ledger.repository.JournalEntryRepository;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.support.TransactionTemplate;
 
+@Slf4j
 @Service
 public class PaymentService {
-
-    private static final Logger log = LoggerFactory.getLogger(PaymentService.class);
 
     private final AccountRepository accounts;
     private final JournalEntryRepository entries;

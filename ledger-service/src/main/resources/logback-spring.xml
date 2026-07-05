@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Console logging for the ledger service.
+
+  Built on Spring Boot's own logback includes so we keep the colored output and,
+  because micrometer-tracing is on the classpath, the [traceId,spanId] pair in
+  every line — that's the correlationId. Copy a traceId from the console straight
+  into Grafana/Tempo to jump from a log line to its distributed trace.
+
+  This file is named logback-spring.xml (not logback.xml) so <springProfile> and
+  Spring property substitution work.
+-->
+<configuration>
+    <!-- Log levels, colour converters, and the CONSOLE_LOG_PATTERN (incl. %correlationId). -->
+    <include resource="org/springframework/boot/logging/logback/defaults.xml"/>
+
+    <!-- Standard Spring Boot console appender named CONSOLE. -->
+    <include resource="org/springframework/boot/logging/logback/console-appender.xml"/>
+
+    <root level="INFO">
+        <appender-ref ref="CONSOLE"/>
+    </root>
+
+    <!-- Our own code at DEBUG: idempotency races, posting logs, etc. -->
+    <logger name="com.ledger" level="DEBUG"/>
+
+    <!-- Uncomment to see the SQL Hibernate runs (and bound parameters). Noisy. -->
+    <logger name="org.hibernate.SQL" level="DEBUG"/>
+<!--    <logger name="org.hibernate.orm.jdbc.bind" level="TRACE"/>-->
+</configuration>

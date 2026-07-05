@@ -1,6 +1,7 @@
 package com.ledger.entity;
 
 import jakarta.persistence.*;
+import lombok.Getter;
 
 import java.time.Instant;
 import java.util.ArrayList;
@@ -11,6 +12,7 @@ import java.util.List;
  * last line of defense against double-posting: even if two retries race
  * past the read-check, only one insert can win.
  */
+@Getter
 @Entity
 @Table(name = "journal_entries")
 public class JournalEntry {
@@ -47,25 +49,5 @@ public class JournalEntry {
     /** Double-entry invariant: the legs of an entry always sum to zero. */
     public long postingSum() {
         return postings.stream().mapToLong(Posting::getAmountMinor).sum();
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public String getIdempotencyKey() {
-        return idempotencyKey;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public Instant getCreatedAt() {
-        return createdAt;
-    }
-
-    public List<Posting> getPostings() {
-        return postings;
     }
 }

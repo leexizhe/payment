@@ -1,6 +1,7 @@
 package com.ledger.service.chaos;
 
 import com.ledger.exception.ChaosException;
+import lombok.Getter;
 import org.springframework.stereotype.Service;
 
 import java.util.concurrent.ThreadLocalRandom;
@@ -10,6 +11,7 @@ import java.util.concurrent.ThreadLocalRandom;
  * rate to the payments endpoint, then watch the RED dashboards degrade and
  * recover. Zero means off. Bounds are enforced by validation on ChaosRequest.
  */
+@Getter
 @Service
 public class ChaosService {
 
@@ -20,14 +22,6 @@ public class ChaosService {
     public void configure(long latencyMs, double errorRate) {
         this.latencyMs = latencyMs;
         this.errorRate = errorRate;
-    }
-
-    public long getLatencyMs() {
-        return latencyMs;
-    }
-
-    public double getErrorRate() {
-        return errorRate;
     }
 
     public boolean isActive() {

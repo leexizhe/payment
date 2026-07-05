@@ -19,6 +19,14 @@ spring:
     problemdetails:
       enabled: true   # RFC-9457 error bodies for framework errors too, one format everywhere
 
+# Access logging (RequestResponseLoggingFilter): one wide JSON event per request.
+ledger:
+  logging:
+    # Fraction (0.0-1.0) of requests to capture full request/response bodies for.
+    # 0 = metadata + sizes only (the safe default); 5xx responses always capture
+    # the response body regardless. Bump this in dev to eyeball payloads.
+    body-sample-rate: 1
+
 management:
   endpoints:
     web:

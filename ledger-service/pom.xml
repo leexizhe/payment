@@ -19,6 +19,8 @@
 
     <properties>
         <java.version>25</java.version>
+        <!-- Override Boot 3.5.6's managed Lombok (too old to run on JDK 25). -->
+        <lombok.version>1.18.42</lombok.version>
     </properties>
 
     <dependencies>
@@ -71,6 +73,14 @@
             <scope>runtime</scope>
         </dependency>
 
+        <!-- Compile-time codegen (@Slf4j, @Getter). optional=true so it never
+             leaks onto the runtime classpath or into the repackaged jar. -->
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <optional>true</optional>
+        </dependency>
+
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
@@ -93,6 +103,22 @@
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
+            </plugin>
+            <!-- JDK 23+ stopped running classpath-discovered annotation processors
+                 by default, so Lombok must be listed explicitly here or no code
+                 is generated (getters, @Slf4j log field, etc.). -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <annotationProcessorPaths>
+                        <path>
+                            <groupId>org.projectlombok</groupId>
+                            <artifactId>lombok</artifactId>
+                            <version>${lombok.version}</version>
+                        </path>
+                    </annotationProcessorPaths>
+                </configuration>
             </plugin>
             <!-- Surefire runs *Test (pure-logic units); Failsafe runs *IT
                  (full-app controller tests against Testcontainers). -->

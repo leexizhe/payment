@@ -2,7 +2,9 @@ package com.ledger.entity;
 
 import com.ledger.enums.AccountType;
 import jakarta.persistence.*;
+import lombok.Getter;
 
+@Getter
 @Entity
 @Table(name = "accounts")
 public class Account {
@@ -49,25 +51,5 @@ public class Account {
 
     public void credit(long amountMinor) {
         this.balanceMinor += amountMinor;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public AccountType getType() {
-        return type;
-    }
-
-    public String getCurrency() {
-        return currency;
-    }
-
-    public long getBalanceMinor() {
-        return balanceMinor;
     }
 }

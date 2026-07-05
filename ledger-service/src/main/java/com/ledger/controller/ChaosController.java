@@ -4,6 +4,7 @@ import com.ledger.dto.chaos.request.ChaosRequest;
 import com.ledger.dto.chaos.response.ChaosStatusResponse;
 import com.ledger.service.chaos.ChaosService;
 import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 /**
@@ -12,13 +13,10 @@ import org.springframework.web.bind.annotation.*;
  */
 @RestController
 @RequestMapping("/api/chaos")
+@RequiredArgsConstructor
 public class ChaosController {
 
     private final ChaosService chaos;
-
-    public ChaosController(ChaosService chaos) {
-        this.chaos = chaos;
-    }
 
     @PostMapping
     public ChaosStatusResponse configure(@RequestBody @Valid ChaosRequest request) {

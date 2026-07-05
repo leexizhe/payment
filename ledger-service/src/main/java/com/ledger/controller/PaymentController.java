@@ -5,6 +5,7 @@ import com.ledger.dto.payment.response.PaymentResponse;
 import com.ledger.repository.JournalEntryRepository;
 import com.ledger.service.payment.PaymentService;
 import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -12,15 +13,11 @@ import org.springframework.web.server.ResponseStatusException;
 
 @RestController
 @RequestMapping("/api/payments")
+@RequiredArgsConstructor
 public class PaymentController {
 
     private final PaymentService payments;
     private final JournalEntryRepository entries;
-
-    public PaymentController(PaymentService payments, JournalEntryRepository entries) {
-        this.payments = payments;
-        this.entries = entries;
-    }
 
     @PostMapping
     public ResponseEntity<PaymentResponse> createPayment(

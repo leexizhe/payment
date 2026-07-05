@@ -1,11 +1,13 @@
 package com.ledger.entity;
 
 import jakarta.persistence.*;
+import lombok.Getter;
 
 /**
  * One leg of a journal entry: a signed amount against one account.
  * Negative = debit (money out), positive = credit (money in).
  */
+@Getter
 @Entity
 @Table(name = "postings")
 public class Posting {
@@ -32,21 +34,5 @@ public class Posting {
         this.entry = entry;
         this.account = account;
         this.amountMinor = amountMinor;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public JournalEntry getEntry() {
-        return entry;
-    }
-
-    public Account getAccount() {
-        return account;
-    }
-
-    public long getAmountMinor() {
-        return amountMinor;
     }
 }
